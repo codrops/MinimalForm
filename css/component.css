@@ -93,8 +93,8 @@
 }
 
 @keyframes moveUpFromDown {
-	from { transform: translateY(100%); }
-	to { transform: translateY(0); }
+	from { -webkit-transform: translateY(100%); transform: translateY(100%); }
+	to { -webkit-transform: translateY(0); transform: translateY(0); }
 }
 
 /* Input field */
