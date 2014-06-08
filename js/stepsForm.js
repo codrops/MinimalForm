@@ -119,6 +119,21 @@
 			return false;
 		}
 
+		// checks HTML5 validation
+		// a cleaner solution might be to add form validation to the custom Modernizr script
+		if ( typeof document.createElement("input").checkValidity == "function" ) {
+			var input = this.questions[ this.current ].querySelector( 'input' );
+			if ( !input.checkValidity() ) {
+				// TODO: show a failure message using the _showError method
+				input.setCustomValidity('Whoops, this fails HTML form validation');
+				// HTML5 validation only shows on submit, the alert dialog forces it to
+				// show now to demonstrate that validation is working. Remove this line in production.
+				alert('Error');
+				// prevent the question from changing
+				return false;
+                        }
+                }
+
 		// check if form is filled
 		if( this.current === this.questionsCount - 1 ) {
 			this.isFilled = true;
