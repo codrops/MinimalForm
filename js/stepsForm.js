@@ -125,7 +125,11 @@
 
 		// checks HTML5 validation
 		if ( this.supportsHTML5Forms ) {
-			var input = this.questions[ this.current ].querySelector( 'input' );
+		    	var input = this.questions[ this.current ].querySelector( 'input' );
+			// clear any previous error messages
+			input.setCustomValidity( '' );
+			
+			// checks input against the validation constraint
 			if ( !input.checkValidity() ) {
 				// Optionally, set a custom HTML5 valiation message
 				// comment or remove this line to use the browser default message
