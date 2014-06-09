@@ -25,7 +25,7 @@
 				<h1>Minimal Form Interface <span>Simplistic, single input view form</span></h1>	
 			</header>
 			<section>
-				<form id="theForm" class="simform" autocomplete="off">
+				<form id="theForm" class="simform">
 					<div class="simform-inner">
 						<ol class="questions">
 							<li>
@@ -83,6 +83,8 @@
 		<script src="js/stepsForm.js"></script>
 		<script>
 			var theForm = document.getElementById( 'theForm' );
+                        //disable form autocomplete
+                        theForm.setAttribute( "autocomplete", "off" );
 
 			new stepsForm( theForm, {
 				onSubmit : function( form ) {
