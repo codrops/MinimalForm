@@ -34,8 +34,8 @@
 	function stepsForm( el, options ) {
 		this.el = el;
 		this.options = extend( {}, this.options );
-  		extend( this.options, options );
-  		this._init();
+		extend( this.options, options );
+		this._init();
 	}
 
 	stepsForm.prototype.options = {
@@ -121,18 +121,18 @@
 
 		// checks HTML5 validation
 		// a cleaner solution might be to add form validation to the custom Modernizr script
-		if ( typeof document.createElement("input").checkValidity == "function" ) {
+		if ( typeof document.createElement("input").checkValidity == 'function' ) {
 			var input = this.questions[ this.current ].querySelector( 'input' );
 			if ( !input.checkValidity() ) {
-				// TODO: show a failure message using the _showError method
-				input.setCustomValidity('Whoops, this fails HTML form validation');
-				// HTML5 validation only shows on submit, the alert dialog forces it to
-				// show now to demonstrate that validation is working. Remove this line in production.
-				alert('Error');
+				// Optionally, set a custom HTML5 valiation message
+				// comment or remove this line to use the browser default message
+				input.setCustomValidity( 'Whoops, that\'s not an email address!' );
+				// display the HTML5 error message
+				this._showError( input.validationMessage );
 				// prevent the question from changing
 				return false;
-                        }
-                }
+			}
+		}
 
 		// check if form is filled
 		if( this.current === this.questionsCount - 1 ) {
@@ -235,6 +235,8 @@
 				message = 'Please fill a valid email address';
 				break;
 			// ...
+			default :
+				message = err;
 		};
 		this.error.innerHTML = message;
 		classie.addClass( this.error, 'show' );
