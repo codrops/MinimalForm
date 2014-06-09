@@ -71,6 +71,10 @@
 		// error message
 		this.error = this.el.querySelector( 'span.error-message' );
 		
+		// checks for HTML5 Form Validation support
+		// a cleaner solution might be to add form validation to the custom Modernizr script
+		this.supportsHTML5Forms = typeof document.createElement("input").checkValidity === 'function';
+		
 		// init events
 		this._initEvents();
 	};
@@ -120,9 +124,12 @@
 		}
 
 		// checks HTML5 validation
-		// a cleaner solution might be to add form validation to the custom Modernizr script
-		if ( typeof document.createElement("input").checkValidity == 'function' ) {
-			var input = this.questions[ this.current ].querySelector( 'input' );
+		if ( this.supportsHTML5Forms ) {
+		    	var input = this.questions[ this.current ].querySelector( 'input' );
+			// clear any previous error messages
+			input.setCustomValidity( '' );
+			
+			// checks input against the validation constraint
 			if ( !input.checkValidity() ) {
 				// Optionally, set a custom HTML5 valiation message
 				// comment or remove this line to use the browser default message
