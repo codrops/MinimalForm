@@ -129,6 +129,8 @@
 			// clear any previous error messages
 			input.setCustomValidity( '' );
 			
+      // disable input box to prevent character submission after keyDown 13
+      input.disabled = true;
 			// checks input against the validation constraint
 			if ( !input.checkValidity() ) {
 				// Optionally, set a custom HTML5 valiation message
@@ -136,6 +138,8 @@
 				input.setCustomValidity( 'Whoops, that\'s not an email address!' );
 				// display the HTML5 error message
 				this._showError( input.validationMessage );
+				// re-enable input
+        input.disabled = false;
 				// prevent the question from changing
 				return false;
 			}
