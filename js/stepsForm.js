@@ -129,6 +129,8 @@
 			// clear any previous error messages
 			input.setCustomValidity( '' );
 			
+			// prevent character submission after keyDown 13
+      input.readOnly = true;
 			// checks input against the validation constraint
 			if ( !input.checkValidity() ) {
 				// Optionally, set a custom HTML5 valiation message
