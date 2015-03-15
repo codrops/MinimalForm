@@ -4,12 +4,12 @@
  *
  * Licensed under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
- * 
+ *
  * Copyright 2014, Codrops
  * http://www.codrops.com
  */
 ;( function( window ) {
-	
+
 	'use strict';
 
 	var transEndEventNames = {
@@ -23,7 +23,7 @@
 		support = { transitions : Modernizr.csstransitions };
 
 	function extend( a, b ) {
-		for( var key in b ) { 
+		for( var key in b ) {
 			if( b.hasOwnProperty( key ) ) {
 				a[key] = b[key];
 			}
@@ -36,6 +36,15 @@
 		this.options = extend( {}, this.options );
 		extend( this.options, options );
 		this._init();
+	}
+
+	// generates a unique id
+	function randomID() {
+		var id = Math.random().toString(36).substr(2, 9);
+		if (document.getElementById(id)) {
+			return randomID();
+		}
+		return id;
 	}
 
 	stepsForm.prototype.options = {
@@ -52,15 +61,29 @@
 		this.questionsCount = this.questions.length;
 		// show first question
 		classie.addClass( this.questions[0], 'current' );
-		
+
 		// next question control
 		this.ctrlNext = this.el.querySelector( 'button.next' );
+		this.ctrlNext.setAttribute( 'aria-label', 'Next' );
 
 		// progress bar
 		this.progress = this.el.querySelector( 'div.progress' );
-		
+		// set progressbar attributes
+		this.progress.setAttribute( 'role', 'progressbar' );
+		this.progress.setAttribute( 'aria-readonly', 'true' );
+		this.progress.setAttribute( 'aria-valuemin', '0' );
+		this.progress.setAttribute( 'aria-valuemax', '100' );
+		this.progress.setAttribute( 'aria-valuenow', '0' );
+
 		// question number status
 		this.questionStatus = this.el.querySelector( 'span.number' );
+		// give the questions status an id
+		this.questionStatus.id = this.questionStatus.id || randomID();
+		// associate "x / y" with the input via aria-describedby
+		for (var i = this.questions.length - 1; i >= 0; i--) {
+			var formElement = this.questions[i].querySelector( 'input' );
+			formElement.setAttribute( 'aria-describedby', this.questionStatus.id );
+		};
 		// current question placeholder
 		this.currentNum = this.questionStatus.querySelector( 'span.number-current' );
 		this.currentNum.innerHTML = Number( this.current + 1 );
@@ -70,11 +93,11 @@
 
 		// error message
 		this.error = this.el.querySelector( 'span.error-message' );
-		
+
 		// checks for HTML5 Form Validation support
 		// a cleaner solution might be to add form validation to the custom Modernizr script
 		this.supportsHTML5Forms = typeof document.createElement("input").checkValidity === 'function';
-		
+
 		// init events
 		this._initEvents();
 	};
@@ -93,9 +116,9 @@
 		firstElInput.addEventListener( 'focus', onFocusStartFn );
 
 		// show next question
-		this.ctrlNext.addEventListener( 'click', function( ev ) { 
+		this.ctrlNext.addEventListener( 'click', function( ev ) {
 			ev.preventDefault();
-			self._nextQuestion(); 
+			self._nextQuestion();
 		} );
 
 		// pressing enter will jump to next question
@@ -106,15 +129,6 @@
 				ev.preventDefault();
 				self._nextQuestion();
 			}
-		} );
-
-		// disable tab
-		this.el.addEventListener( 'keydown', function( ev ) {
-			var keyCode = ev.keyCode || ev.which;
-			// tab
-			if( keyCode === 9 ) {
-				ev.preventDefault();
-			} 
 		} );
 	};
 
@@ -128,7 +142,7 @@
 		    	var input = this.questions[ this.current ].querySelector( 'input' );
 			// clear any previous error messages
 			input.setCustomValidity( '' );
-			
+
 			// checks input against the validation constraint
 			if ( !input.checkValidity() ) {
 				// Optionally, set a custom HTML5 valiation message
@@ -200,7 +214,10 @@
 
 	// updates the progress bar by setting its width
 	stepsForm.prototype._progress = function() {
-		this.progress.style.width = this.current * ( 100 / this.questionsCount ) + '%';
+		var currentProgress = this.current * ( 100 / this.questionsCount );
+		this.progress.style.width = currentProgress + '%';
+		// update the progressbar's aria-valuenow attribute
+		this.progress.setAttribute('aria-valuenow', currentProgress);
 	}
 
 	// changes the current question number
@@ -235,10 +252,10 @@
 	stepsForm.prototype._showError = function( err ) {
 		var message = '';
 		switch( err ) {
-			case 'EMPTYSTR' : 
+			case 'EMPTYSTR' :
 				message = 'Please fill the field before continuing';
 				break;
-			case 'INVALIDEMAIL' : 
+			case 'INVALIDEMAIL' :
 				message = 'Please fill a valid email address';
 				break;
 			// ...
