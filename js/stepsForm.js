@@ -81,7 +81,7 @@
 		this.questionStatus.id = this.questionStatus.id || randomID();
 		// associate "x / y" with the input via aria-describedby
 		for (var i = this.questions.length - 1; i >= 0; i--) {
-			var formElement = this.questions[i].querySelector( 'input' );
+			var formElement = this.questions[i].querySelector( 'input, textarea, select' );
 			formElement.setAttribute( 'aria-describedby', this.questionStatus.id );
 		};
 		// current question placeholder
@@ -105,7 +105,7 @@
 	stepsForm.prototype._initEvents = function() {
 		var self = this,
 			// first input
-			firstElInput = this.questions[ this.current ].querySelector( 'input' ),
+			firstElInput = this.questions[ this.current ].querySelector( 'input, textarea, select' ),
 			// focus
 			onFocusStartFn = function() {
 				firstElInput.removeEventListener( 'focus', onFocusStartFn );
@@ -139,7 +139,7 @@
 
 		// checks HTML5 validation
 		if ( this.supportsHTML5Forms ) {
-		    	var input = this.questions[ this.current ].querySelector( 'input' );
+			var input = this.questions[ this.current ].querySelector( 'input, textarea, select' );
 			// clear any previous error messages
 			input.setCustomValidity( '' );
 
@@ -200,7 +200,7 @@
 					self.currentNum.innerHTML = self.nextQuestionNum.innerHTML;
 					self.questionStatus.removeChild( self.nextQuestionNum );
 					// force the focus on the next input
-					nextQuestion.querySelector( 'input' ).focus();
+					nextQuestion.querySelector( 'input, textarea, select' ).focus();
 				}
 			};
 
@@ -239,7 +239,7 @@
 	// the validation function
 	stepsForm.prototype._validate = function() {
 		// current question´s input
-		var input = this.questions[ this.current ].querySelector( 'input' ).value;
+		var input = this.questions[ this.current ].querySelector( 'input, textarea, select' ).value;
 		if( input === '' ) {
 			this._showError( 'EMPTYSTR' );
 			return false;
