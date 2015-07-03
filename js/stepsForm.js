@@ -115,7 +115,7 @@
 	};
 
 	stepsForm.prototype._nextQuestion = function() {
-		if( !this._validade() ) {
+		if( !this._validate() ) {
 			return false;
 		}
 
@@ -198,7 +198,7 @@
 
 	// TODO (next version..)
 	// the validation function
-	stepsForm.prototype._validade = function() {
+	stepsForm.prototype._validate = function() {
 		// current question´s input
 		var input = this.questions[ this.current ].querySelector( 'input' );
 
