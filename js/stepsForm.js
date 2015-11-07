@@ -122,7 +122,7 @@
 		} );
 
 		// pressing enter will jump to next question
-		document.addEventListener( 'keydown', function( ev ) {
+		this.el.addEventListener( 'keydown', function( ev ) {
 			var keyCode = ev.keyCode || ev.which;
 			// enter
 			if( keyCode === 13 ) {
